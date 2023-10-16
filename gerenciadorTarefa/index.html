@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Previsão do Tempo</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Tarefas</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Previsão do Tempo</h1>
-    <form id="weatherForm">
-        <label for="city">Digite o nome da cidade:</label>
-        <input type="text" id="city" name="city" required>
-        <button type="submit">Buscar Previsão</button>
-    </form>
-    <div id="weatherContainer"></div>
+    <div class="container">
+        <h1>Gerador de Tarefas</h1>
+        <div id="task"></div>
+        <button id="generate-btn">Gerar Tarefa</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

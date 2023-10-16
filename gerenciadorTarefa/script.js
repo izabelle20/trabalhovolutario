@@ -1,24 +1,13 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const weatherForm = document.getElementById('weatherForm');
-    const weatherContainer = document.getElementById('weatherContainer');
+const generateButton = document.getElementById('generate-btn');
+const taskElement = document.getElementById('task');
 
-    weatherForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const city = document.getElementById('city').value;
-
-        fetch(`get_weather.php?city=${city}`)
-            .then(response => response.json())
-            .then(data => {
-                const { name, main, weather } = data;
-                weatherContainer.innerHTML = `
-                    <h2>Previsão do Tempo para ${name}</h2>
-                    <p>Temperatura: ${main.temp}°C</p>
-                    <p>Condição: ${weather[0].description}</p>
-                `;
-                weatherContainer.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Erro ao buscar previsão do tempo:', error);
-            });
-    });
+generateButton.addEventListener('click', () => {
+    fetch('task_generator.php')
+        .then(response => response.text())
+        .then(data => {
+            taskElement.textContent = data;
+        })
+        .catch(error => {
+            console.error('Houve um erro ao obter a tarefa:', error);
+        });
 });
