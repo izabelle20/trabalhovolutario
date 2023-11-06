@@ -1,0 +1,16 @@
+{
+    "name": "meu-projeto",
+    "version": "1.0.0",
+    "description": "Uma breve descrição do meu projeto.",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "test": "echo \"Erro: nenhum teste especificado\" && exit 1"
+    },
+    "author": "Nome do Autor",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^4.17.1",
+      "body-parser": "^1.19.0"
+    }
+  }

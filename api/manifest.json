@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "Minha Extensão",
+    "version": "1.0",
+    "description": "Uma extensão de exemplo para o navegador",
+    "permissions": [
+      "activeTab"
+    ],
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "./img/ckeck.png",
+        "48": "./img/dinheiro.png",
+        "128": "./img/facebook.png"
+      }
+    },
+    "icons": {
+        "16": "./img/ckeck.png",
+        "48": "./img/dinheiro.png",
+        "128": "./img/facebook.png"
+    }
+}
+
+
+  
