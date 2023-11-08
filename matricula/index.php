@@ -1,82 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matricula escolar</title>
+    <link rel="stylesheet" href="login.css">
+    <title>Escola Imaginária</title>
 </head>
 <body>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            margin: 0;
-        }
-        .header .btn {
-            padding: 8px 20px;
-            background-color: palevioletred;
-            color: #ffffff;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-        .header .btn:hover {
-            background-color: #92425c;
-        }
-    </style>
-
-    <!--HEADER-->
-    <div class="header">
-        <h1>Escola Imaginaria</h1>
-        <div>
-            <a class="btn" href="novaMatricula.php">Nova matricula</a>
-            <a class="btn" href="novoProfessor.php">Novo professor</a>
-            <a class="btn" href="listarAlunos.php">Listar Alunos</a>
-            <a class="btn" href="listarProfessor.php">Listar Professor</a>
-        </div>
-    </div>
-
-    <!--MIOLO-->
     <div class="container">
-        <div class="row">
-            <div class="col mt-5">
-                <?php
-                include("config.php");
-                switch(@$_REQUEST["page"]){
-                    case "novaMatricula":
-                        include("novaMatricula.php");
-                    break;
-                    case "novoProfessor":
-                        include("novoProfessor.php");
-                    break;
-                    case "listarAluno":
-                        include("listarAlunos.php");
-                    break;
-                    case "listarProfessor":
-                        include("listarProfessor.php");
-                    break;
-                    case "salvar":
-                        include("salvarMatricula.php");
-                    break;
-                    case "editar":
-                        include("editarMatricula.php");
-                    break;
-                    
-                }
-                ?>
-            </div>
+        <h2>Login</h2>
+        <form action="process_login.php" method="post" id="loginForm">
+            <label for="email">E-mail:</label><br>
+            <input type="email" placeholder="E-mail" name="email" required><br>
+            <label for="psw">Senha:</label><br>
+            <input type="password" placeholder="Senha" name="psw" required><br>
+            <button type="submit" id="loginButton">Login</button>
+        </form>
+        <div class="switch">
+            <p>Não tem uma conta? <a href="formularioCadastro.php">Cadastre-se</a></p>
         </div>
     </div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            let form = e.target;
+            let formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            }).catch(error => {
+                console.error('Erro no envio do formulário:', error);
+            });
+        });
+    </script>
 </body>
 </html>
