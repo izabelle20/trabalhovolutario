@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Escola Imaginaria</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="paginaCadastro.css">
 </head>
 <body>
 

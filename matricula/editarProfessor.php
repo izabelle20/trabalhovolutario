@@ -24,7 +24,7 @@ if (isset($_REQUEST["id"])) {
 
     if ($res && $res->num_rows > 0) {
         $row = $res->fetch_assoc();
-        $response['professor'] = array(
+        $response['professores'] = array(
             'id' => $row['id'],
             'nome' => $row['nome'],
             'disciplina' => $row['disciplina'],

@@ -28,17 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data['acao']) && $data['acao'] === 'cadastrar') {
         // Cadastrar novo produto
         $nome = $data['nome'];
+        $email = $data['email']; // Add email field
         $id = $data['id'];
-        $campus = $data['campus'];
-        $periodo = $data['periodo'];
-        $nome_professor = $data['nome_professor'];
-        $idade = $data['idade'];
-        $serie = $data['serie'];
-        $curso = $data['curso'];
+        $disciplina = $data['disciplina']; // Add disciplina field
 
         // Prepare and execute the INSERT query
-        $stmt = $con->prepare("INSERT INTO produtos (nome, id, campus, periodo, nome_professor, idade, serie, curso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $nome, $id, $campus, $periodo, $nome_professor, $idade, $serie, $curso);
+        $stmt = $con->prepare("INSERT INTO produtos (nome, email, id, disciplina) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $nome, $email, $id, $disciplina);
 
         if ($stmt->execute()) {
             $response = array(

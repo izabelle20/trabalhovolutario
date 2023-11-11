@@ -24,7 +24,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
 
     // SQL para excluir um registro
-    $sql = "DELETE FROM matriculas WHERE id = $id";
+    $sql = "DELETE FROM alunos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
         $response['message'] = 'Matrícula excluída com sucesso';
