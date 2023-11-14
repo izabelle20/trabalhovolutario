@@ -9,13 +9,19 @@ $dados['erro'] = false;
 $dados['mensagem'] = "";
 $dados['produtos'] = array();
 
-$sql = "SELECT * FROM produtos";
-$result = mysqli_query($con, $sql);
+// Verificar se o parâmetro "id" está presente na URL
+if (isset($_GET['id'])) {
+    $produto_id = intval($_GET['id']);
 
-// Verificar se há produtos retornados
-if (mysqli_num_rows($result) > 0) {
-    while ($produto = mysqli_fetch_assoc($result)) {
-        // Adicionar cada produto aos dados de resposta
+    // Consultar produto com o ID fornecido
+    $sql = "SELECT * FROM produtos WHERE id = $produto_id";
+    $result = mysqli_query($con, $sql);
+
+    // Verificar se o produto foi encontrado
+    if (mysqli_num_rows($result) > 0) {
+        $produto = mysqli_fetch_assoc($result);
+
+        // Adicionar o produto aos dados de resposta
         $item = array(
             'id' => intval($produto['id']),
             'nome' => $produto['nome'],
@@ -23,11 +29,15 @@ if (mysqli_num_rows($result) > 0) {
             'valor' => $produto['valor'],
             'status' => $produto['status']
         );
-        array_push($dados['produtos'], $item);
+
+        $dados['produtos'] = $item;
+    } else {
+        $dados['erro'] = true;
+        $dados['mensagem'] = "Nenhum produto encontrado com o ID $produto_id";
     }
 } else {
     $dados['erro'] = true;
-    $dados['mensagem'] = "Nenhum produto encontrado";
+    $dados['mensagem'] = "Parâmetro 'id' ausente na URL";
 }
 
 // Retornar os dados como JSON

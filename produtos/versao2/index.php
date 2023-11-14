@@ -3,65 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
     <title>Produtos</title>
 </head>
 <body>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            margin: 0;
-        }
-        .header .btn {
-            padding: 8px 20px;
-            background-color: palevioletred;
-            color: #ffffff;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-        .header .btn:hover {
-            background-color: #92425c;
-        }
-    </style>
 
-    <!--HEADER-->
+    <!-- Cabeçalho da página -->
     <div class="header">
         <h1>Minha Loja</h1>
+        <!-- Botões de navegação -->
         <div>
             <a class="btn" href="novo-produto.php">Novo Produto</a>
             <a class="btn" href="listar-produto.php">Listar Produtos</a>
         </div>
     </div>
 
-    <!--MIOLO-->
+    <!-- Conteúdo principal -->
     <div class="container">
         <div class="row">
             <div class="col mt-5">
                 <?php
+                // Inclui o arquivo config.php que provavelmente contém configurações comuns
                 include("config.php");
+
+                // Utiliza um switch para determinar qual conteúdo incluir com base na variável 'page'
                 switch(@$_REQUEST["page"]){
                     case "novo":
+                        // Inclui o arquivo novo-produto.php
                         include("novo-produto.php");
                     break;
                     case "listar":
+                        // Inclui o arquivo listar-produto.php
                         include("listar-produto.php");
                     break;
                     case "salvar":
+                        // Inclui o arquivo salvar-produto.php
                         include("salvar-produto.php");
                     break;
                     case "editar":
+                        // Inclui o arquivo editar-produto.php
                         include("editar-produto.php");
                     break;
                 }
