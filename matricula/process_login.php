@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST['psw'];
 
     // Consulta preparada
-    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? and senha = ?");
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ?");
     $stmt->bind_param("ss", $email, $senha);
     $stmt->execute();
     $result = $stmt->get_result();

@@ -1,18 +1,18 @@
 <?php
 header('Content-Type: application/json');
 
-define('HOST', 'localhost');
-define('USER', 'root');
-define('PASS', '');
-define('BASE', 'matricula');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "matricula";
 
-$con = new mysqli(HOST, USER, PASS, BASE);
-
-$response = array();
+$con = new mysqli($servername, $username, $password, $dbname);
 
 if ($con->connect_error) {
-    $response['error'] = true;
-    $response['message'] = 'Erro ao conectar ao banco de dados: ' . $con->connect_error;
+    $response = array(
+        'error' => true,
+        'message' => 'Conexão falhou: ' . $con->connect_error
+    );
     echo json_encode($response);
     die();
 }
@@ -20,35 +20,64 @@ if ($con->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (isset($data['nome'], $data['id'], $data['idade'], $data['serie'], $data['curso'], $data['campus'], $data['periodo'], $data['nome_do_professor'])) {
-        $nome = $data['nome'];
-        $id = $data['id'];
-        $idade = $data['idade'];
-        $serie = $data['serie'];
-        $curso = $data['curso'];
-        $campus = $data['campus'];
-        $periodo = $data['periodo'];
-        $nome_do_professor = $data['nome_do_professor'];
+    if (isset($data['acao'])) {
+        if ($data['acao'] === 'salvar') {
+            if (!isset($data['nome_aluno'], $data['serie'], $data['idade'], $data['curso'], $data['periodo'], $data['campus'], $data['nome_professor'], $data['matricula'], $data['id'])) {
+                $response = array(
+                    'error' => true,
+                    'message' => 'Dados incompletos fornecidos.'
+                );
+                echo json_encode($response);
+                die();
+            }
 
-        $sql = "INSERT INTO alunos (nome, id, idade, serie, curso, campus, periodo, nome_do_professor) VALUES ('$nome', '$id', '$idade', '$serie', '$curso', '$campus', '$periodo', '$nome_do_professor')";
+            $id = $data['id'];
+            $nome_aluno = $data['nome_aluno'];
+            $serie = $data['serie'];
+            $idade = $data['idade'];
+            $curso = $data['curso'];
+            $periodo = $data['periodo'];
+            $campus = $data['campus'];
+            $nome_professor = $data['nome_professor'];
+            $matricula = $data['matricula'];
 
-        if ($con->query($sql) === TRUE) {
-            $response['success'] = true;
-            $response['message'] = 'Nova matrícula realizada com sucesso.';
+            $check_stmt = $con->prepare("SELECT id FROM matricula.alunos WHERE matricula = ?");
+            $check_stmt->bind_param("s", $matricula);
+            $check_stmt->execute();
+            $check_stmt->store_result();
+
+            if ($check_stmt->num_rows > 0) {
+                $stmt = $con->prepare("INSERT INTO matricula.alunos (nome_aluno, serie, idade, curso, periodo, campus, nome_professor, matricula) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssdssiss", $nome_aluno, $serie, $idade, $curso, $periodo, $campus, $nome_professor, $matricula);
+            } else {
+                $stmt = $con->prepare("INSERT INTO matricula.alunos (nome_aluno, serie, idade, curso, periodo, campus, nome_professor, matricula) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssdsssssi", $nome_aluno, $serie, $idade, $curso, $periodo, $campus, $nome_professor, $matricula);
+            }
+
+            if ($stmt->execute()) {
+                $response = array(
+                    'message' => 'Aluno salvo com sucesso.'
+                );
+                echo json_encode($response);
+            } else {
+                $response = array(
+                    'error' => true,
+                    'message' => 'Erro ao salvar o aluno: ' . $stmt->error
+                );
+                echo json_encode($response);
+            }
+
+            $stmt->close();
+            $check_stmt->close();
         } else {
-            $response['error'] = true;
-            $response['message'] = 'Erro ao realizar matrícula: ' . $con->error;
+            $response = array(
+                'error' => true,
+                'message' => 'Ação inválida. Forneça uma ação válida (salvar).'
+            );
+            echo json_encode($response);
         }
-
-        $con->close();
-    } else {
-        $response['error'] = true;
-        $response['message'] = 'Dados de matrícula ausentes. Por favor, forneça todos os campos necessários.';
     }
-} else {
-    $response['error'] = true;
-    $response['message'] = 'Método de solicitação inválido. Apenas o método POST é permitido. Utilize o aplicativo (POSTMAN) para adicionar uma nova matrícula.';
 }
 
-echo json_encode($response);
+$con->close();
 ?>

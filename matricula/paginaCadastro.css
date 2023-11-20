@@ -1,3 +1,4 @@
+/* Estilo para o corpo da página */
 body {
     display: flex;
     justify-content: center;
@@ -10,17 +11,20 @@ body {
     background-repeat: no-repeat;
 }
 
+/* Estilo para o contêiner principal */
 .container {
     width: 20%;
     text-align: center;
-    background-color: rgb(204,75,30);
+    background-color: rgb(204, 75, 30);
     padding: 20px;
 }
 
+/* Estilo para formulários */
 form {
     text-align: left;
 }
 
+/* Estilo para campos de entrada de e-mail e senha */
 input[type=email], input[type=password] {
     width: 100%;
     padding: 12px;
@@ -30,6 +34,7 @@ input[type=email], input[type=password] {
     border-radius: 4px;
 }
 
+/* Estilo para campos de entrada de texto e senha */
 input[type=text], input[type=password] {
     width: 100%;
     padding: 12px;
@@ -39,6 +44,7 @@ input[type=text], input[type=password] {
     border-radius: 4px;
 }
 
+/* Estilo para botões de envio */
 input[type=submit] {
     width: 100%;
     background-color: #4CAF50;
@@ -50,10 +56,12 @@ input[type=submit] {
     cursor: pointer;
 }
 
+/* Efeito de hover para botões de envio */
 input[type=submit]:hover {
     background-color: #45a049;
 }
 
+/* Estilo para rótulos */
 label {
     font-weight: bold;
 }

@@ -1,3 +1,4 @@
+/* Estilos para o corpo da página */
 body {
     display: flex;
     justify-content: center;
@@ -7,6 +8,7 @@ body {
     background-color: #ffe9da;
 }
 
+/* Estilos para o contêiner principal */
 .container {
     width: 20%;
     text-align: center;
@@ -14,6 +16,7 @@ body {
     padding: 20px;
 }
 
+/* Estilos para um contêiner específico chamado .butoes-centrais */
 .butoes-centrais {
     width: 300px;
     padding: 20px;
@@ -22,12 +25,14 @@ body {
     background-color: rgb(204, 75, 30);
 }
 
-.butoes-centrais h4{
+/* Estilos para o título h4 dentro do contêiner .butoes-centrais */
+.butoes-centrais h4 {
     text-align: center;
     font-size: 20px;
     font-family: 'Times New Roman', Times, serif;
 }
 
+/* Estilos para botões genéricos */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -40,6 +45,7 @@ body {
     cursor: pointer;
 }
 
+/* Estilos para o estado de hover dos botões */
 .btn:hover {
     background-color: #ffe9da;
 }

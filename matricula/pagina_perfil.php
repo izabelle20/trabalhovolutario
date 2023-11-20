@@ -7,45 +7,45 @@
     <title>Escola Imaginária</title>
 </head>
 <body>
+    <!-- Cabeçalho com botões centrais -->
     <div class="butoes-centrais">
-        <h4>Bem-vindo(a) a Escola Imaginaria!</h4>
-        <a class="btn" href="novaMatricula.php">Nova matricula</a>
+        <h4>Bem-vindo(a) à Escola Imaginária!</h4>
+        <a class="btn" href="novaMatricula.php">Nova matrícula</a>
         <a class="btn" href="novoProfessor.php">Novo professor</a>
         <a class="btn" href="listarAlunos.php">Listar Alunos</a>
         <a class="btn" href="listarProfessor.php">Listar Professor</a>
     </div>
 
-    <!--MIOLO-->
+    <!-- Corpo da página -->
     <div class="">
         <div class="row">
             <div class="col mt-5">
                 <?php
+                // Inclusão de arquivos PHP com base no parâmetro "page" recebido
                 include("config.php");
                 switch(@$_REQUEST["page"]){
                     case "novaMatricula":
                         include("novaMatricula.php");
-                    break;
+                        break;
                     case "novoProfessor":
                         include("novoProfessor.php");
-                    break;
+                        break;
                     case "listarAluno":
                         include("listarAlunos.php");
-                    break;
+                        break;
                     case "listarProfessor":
                         include("listarProfessor.php");
-                    break;
+                        break;
                     case "salvar":
                         include("salvarMatricula.php");
-                    break;
+                        break;
                     case "editar":
                         include("editarMatricula.php");
-                    break;
-                    
+                        break;
                 }
                 ?>
             </div>
         </div>
     </div>
-    
 </body>
 </html>

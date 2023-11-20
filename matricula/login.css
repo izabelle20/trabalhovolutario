@@ -1,26 +1,30 @@
-body{
+/* Configuração da página */
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: url('img/login.jpeg');
+    background-image: url('img/login.jpeg'); /* Imagem de fundo */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
+/* Estilo do contêiner principal */
 .container {
     width: 20%;
     text-align: center;
-    background-color: rgb(204,75,30);
+    background-color: rgb(204, 75, 30);
     padding: 20px;
 }
 
+/* Estilo do formulário dentro do contêiner */
 form {
     text-align: left;
 }
 
+/* Estilo para campos de entrada de email e senha */
 input[type=email], input[type=password] {
     width: 100%;
     padding: 10px;
@@ -28,6 +32,7 @@ input[type=email], input[type=password] {
     box-sizing: border-box;
 }
 
+/* Estilo do botão de envio do formulário */
 button[type=submit] {
     width: 100%;
     background-color: #4CAF50;
@@ -39,15 +44,18 @@ button[type=submit] {
     cursor: pointer;
 }
 
+/* Efeito de hover para o botão de envio do formulário */
 button[type=submit]:hover {
     background-color: #45a049;
 }
 
+/* Estilo para o link de alternância */
 .switch {
     text-align: center;
     margin-top: 20px;
 }
 
+/* Estilo para parágrafos no centro da página */
 p {
     text-align: center;
 }

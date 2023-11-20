@@ -1,72 +1,84 @@
 <?php
-// Set the content type to JSON
+// Define o tipo de conteúdo como JSON
 header('Content-Type: application/json');
 
-// Database connection details
+// Configuração do banco de dados
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "login_escola";
+$dbname = "matricula";
 
-// Create a new mysqli connection
+// Cria uma nova conexão com o banco de dados
 $con = new mysqli($servername, $username, $password, $dbname);
 
-// Check the connection
+// Verifica se a conexão foi bem-sucedida
 if ($con->connect_error) {
+    // Se houver erro na conexão, retorna uma resposta JSON com a mensagem de erro
     $response = array(
         'error' => true,
         'message' => 'Conexão falhou: ' . $con->connect_error
     );
     echo json_encode($response);
-    die();
+    die(); // Encerra o script
 }
 
-// Handle CRUD operations based on the HTTP method
+// Cadastra, atualiza, exclui ou salva um aluno se a requisição for do tipo POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtém os dados JSON da requisição e os converte para um array associativo
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (isset($data['acao']) && $data['acao'] === 'cadastrar') {
-        // Cadastrar novo produto
-        $nome = $data['nome'];
+    if (isset($data['acao']) && $data['acao'] === 'salvar') { // Salvar (criar ou atualizar) aluno
+        // Lógica de salvar aluno
         $id = $data['id'];
-        $campus = $data['campus'];
-        $periodo = $data['periodo'];
-        $nome_professor = $data['nome_professor'];
-        $idade = $data['idade'];
+        $nome_aluno = $data['nome_aluno'];
         $serie = $data['serie'];
+        $idade = $data['idade'];
         $curso = $data['curso'];
+        $periodo = $data['periodo'];
+        $campus = $data['campus'];
+        $nome_professor = $data['nome_professor'];
+        $matricula = $data['matricula'];
 
-        // Prepare and execute the INSERT query
-        $stmt = $con->prepare("INSERT INTO produtos (nome, id, campus, periodo, nome_professor, idade, serie, curso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $nome, $id, $campus, $periodo, $nome_professor, $idade, $serie, $curso);
+        // Use prepared statement para evitar SQL injection
+        $check_stmt = $con->prepare("SELECT id FROM matricula.alunos WHERE matricula = ?");
+        $check_stmt->bind_param("s", $matricula);
+        $check_stmt->execute();
+        $check_stmt->store_result();
+
+        if ($check_stmt->num_rows > 0) {
+            // O aluno existe, então atualiza os dados
+            $stmt = $con->prepare("UPDATE matricula.alunos SET nome_aluno=?, serie=?, idade=?, curso=?, periodo=?, campus=?, nome_professor=?, matricula=? WHERE id=?");
+            $stmt->bind_param("ssdssssi", $nome_aluno, $serie, $idade, $curso, $periodo, $campus, $nome_professor, $matricula, $id);
+        } else {
+            // O aluno não existe, então cria um novo
+            $stmt = $con->prepare("INSERT INTO matricula.alunos (nome_aluno, serie, idade, curso, periodo, campus, nome_professor, matricula) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssdssssi", $nome_aluno, $serie, $idade, $curso, $periodo, $campus, $nome_professor, $matricula);
+        }
 
         if ($stmt->execute()) {
             $response = array(
-                'message' => 'Novo produto cadastrado com sucesso.'
+                'message' => 'Aluno salvo com sucesso.'
             );
             echo json_encode($response);
         } else {
             $response = array(
                 'error' => true,
-                'message' => 'Erro ao cadastrar o produto: ' . $con->error
+                'message' => 'Erro ao salvar o aluno: ' . $stmt->error
             );
             echo json_encode($response);
         }
 
         $stmt->close();
-    } elseif (isset($data['acao']) && $data['acao'] === 'editar') {
-        // Editar produto existente - Add your code here
-    } elseif (isset($data['acao']) && $data['acao'] === 'excluir') {
-        // Excluir produto - Add your code here
+        $check_stmt->close();
     } else {
+        // Se a ação não for reconhecida, retorna uma resposta JSON com uma mensagem de erro
         $response = array(
             'error' => true,
-            'message' => 'Ação inválida. Forneça uma ação válida (cadastrar, editar ou excluir).'
+            'message' => 'Ação inválida. Forneça uma ação válida (salvar).'
         );
         echo json_encode($response);
     }
 }
 
-// Close the database connection
-$con->close();
+$con->close(); // Fecha a conexão com o banco de dados
 ?>
