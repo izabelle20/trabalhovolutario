@@ -14,54 +14,51 @@ if ($mysqli->connect_error) {
     die("Conexão falhou: " . $mysqli->connect_error);
 }
 
-// Atualizar Item do Pedido
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'atualizar') {
+// Cadastrar Item do Pedido
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Decodificar o corpo da solicitação JSON
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Verificar se o ID do item do pedido está presente nos dados
-    if (!isset($data['id_item_pedido'])) {
-        echo json_encode(["status" => "error", "message" => "ID do item do pedido ausente"]);
-        exit;
-    }
-
-    // Preparar a consulta SQL para atualizar o item do pedido
-    $sql = "UPDATE item_do_pedido SET num_pedido = ?, codigo_produto = ?, quantidade = ?, valor_item = ? WHERE id_item_pedido = ?";
-
-    try {
-        // Usar declarações preparadas para evitar injeção de SQL
+    // Validação básica
+    if (
+        isset($data['num_pedido']) &&
+        isset($data['codigo_produto']) &&
+        isset($data['quantidade']) &&
+        isset($data['valor_item'])
+    ) {
+        // Preparar a consulta SQL para cadastrar um novo item do pedido
+        $sql = "INSERT INTO item_do_pedido (num_pedido, codigo_produto, quantidade, valor_item) VALUES (?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql);
 
-        if (!$stmt) {
-            throw new Exception("Erro na preparação da consulta: " . $mysqli->error);
-        }
-
-        // Liga os parâmetros
+        // Usar declarações preparadas para evitar injeção de SQL
         $stmt->bind_param(
             "sssd",
             $data['num_pedido'],
             $data['codigo_produto'],
             $data['quantidade'],
-            $data['valor_item'],
-            $data['id_item_pedido']
+            $data['valor_item']
         );
 
-        // Executa a consulta
-        if (!$stmt->execute()) {
-            throw new Exception("Erro ao executar a consulta: " . $stmt->error);
+        // Executar a consulta
+        if ($stmt->execute()) {
+            // Retornar uma resposta JSON de sucesso
+            echo json_encode(['status' => 'success', 'message' => 'Item do pedido cadastrado com sucesso']);
+            http_response_code(201); // Código HTTP 201 - Created
+        } else {
+            // Retornar uma resposta de erro JSON se a consulta falhar
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao cadastrar item do pedido']);
+            http_response_code(500); // Código HTTP 500 - Internal Server Error
         }
 
-        // Retornar uma resposta JSON com a mensagem de sucesso
-        echo json_encode(["status" => "success", "message" => "Item do pedido atualizado com sucesso!"]);
-    } catch (Exception $e) {
-        // Capturar exceções e retornar mensagem de erro
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
-    } finally {
-        // Fechar a declaração e a conexão
-        if ($stmt) {
-            $stmt->close();
-        }
-        $mysqli->close();
+        // Fechar a declaração
+        $stmt->close();
+    } else {
+        // Retornar uma resposta de erro JSON se os dados estiverem ausentes
+        echo json_encode(['status' => 'error', 'message' => 'Dados do item do pedido incompletos']);
+        http_response_code(400); // Código HTTP 400 - Bad Request
     }
 }
+
+// Fechar a conexão
+$mysqli->close();
 ?>

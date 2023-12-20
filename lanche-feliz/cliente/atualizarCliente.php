@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     // Validação básica
     if (
-        isset($requestData['codigo_cliente']) &&
         isset($requestData['nome_cliente']) &&
         isset($requestData['endereco']) &&
         isset($requestData['cidade']) &&
@@ -40,21 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             die("Conexão falhou: " . $mysqli->connect_error);
         }
 
-        // Prepara a consulta SQL para atualizar um cliente
-        $sql = "UPDATE cliente SET nome_cliente=?, endereco=?, cidade=?, CEP=?, UF=?, CPFCNPJ=?, tipo_cliente=? WHERE codigo_cliente=?";
+        // Prepara a consulta SQL para atualizar um cliente com base no nome
+        $sql = "UPDATE cliente SET endereco=?, cidade=?, CEP=?, UF=?, CPFCNPJ=?, tipo_cliente=? WHERE nome_cliente=?";
         $stmt = $mysqli->prepare($sql);
 
         // Liga os parâmetros
         $stmt->bind_param(
-            "sssssssi",
-            $requestData['nome_cliente'],
+            "sssssss",
             $requestData['endereco'],
             $requestData['cidade'],
             $requestData['CEP'],
             $requestData['UF'],
             $requestData['CPFCNPJ'],
             $requestData['tipo_cliente'],
-            $requestData['codigo_cliente']
+            $requestData['nome_cliente']
         );
 
         // Executa a consulta
